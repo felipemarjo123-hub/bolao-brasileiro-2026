@@ -1,9 +1,15 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
-import MatchCard from "@/components/MatchCard";
+import dynamic from "next/dynamic";
 import RoundSelector from "@/components/RoundSelector";
+
+const MatchCard = dynamic(() => import("@/components/MatchCard"), {
+  loading: () => (
+    <div className="bg-card border border-slate-700 rounded-xl p-4 flex flex-col items-center animate-pulse h-48" />
+  ),
+});
+
 export default async function JogosPage({
   searchParams,
 }: {
@@ -11,27 +17,27 @@ export default async function JogosPage({
 }) {
   const session = await getServerSession(authOptions);
   
-  if (!session || !session.user?.email) {
-    redirect("/login");
-  }
+  // Login não obrigatório por enquanto (modo preview)
 
   const rodada = searchParams.rodada ? parseInt(searchParams.rodada) : 19;
 
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-    include: {
-      roundParticipations: {
-        where: { round: rodada }
-      },
-      invitedBy: {
+  const user = session?.user?.email
+    ? await prisma.user.findUnique({
+        where: { email: session.user.email },
         include: {
-          invitedBy: true
+          roundParticipations: {
+            where: { round: rodada }
+          },
+          invitedBy: {
+            include: {
+              invitedBy: true
+            }
+          }
         }
-      }
-    }
-  });
+      })
+    : null;
 
-  const isPaid = user?.roundParticipations[0]?.isPaid || false;
+  const isPaid = user?.roundParticipations?.[0]?.isPaid || false;
   
   // Descobrir a Chave Pix (Seja do inviter direto se for Gerente/Dono, ou do inviter do inviter se for Colaborador)
   let pixKeyToShow = null;
@@ -55,7 +61,7 @@ export default async function JogosPage({
       homeTeam: true,
       awayTeam: true,
       bets: {
-        where: { userId: user?.id }
+        where: { userId: user?.id ?? 'none' }
       }
     },
     orderBy: { matchDate: 'asc' }

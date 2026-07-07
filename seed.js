@@ -142,11 +142,52 @@ async function main() {
     { homeTeamId: getTeamId('Vitória'), awayTeamId: getTeamId('RB Bragantino'), matchDate: new Date('2026-07-23T19:00:00.000Z'), round: 19 },
   ];
 
+  console.log("Gerando as rodadas 20 a 38...");
+  let roundTeams = createdTeams.map(t => t.id);
+  let currentDate = new Date('2026-07-25T16:00:00.000Z'); // Sábado seguinte
+
+  for (let r = 20; r <= 38; r++) {
+    for (let i = 0; i < 10; i++) {
+      const home = roundTeams[i];
+      const away = roundTeams[19 - i];
+      
+      let matchDate = new Date(currentDate);
+      // Distribui os dias: 3 no sábado, 6 no domingo, 1 na segunda
+      if (i < 3) {
+          matchDate.setDate(matchDate.getDate()); // Sábado
+          matchDate.setHours(18, 30, 0);
+      }
+      else if (i < 9) {
+          matchDate.setDate(matchDate.getDate() + 1); // Domingo
+          matchDate.setHours(16, 0, 0);
+      }
+      else {
+          matchDate.setDate(matchDate.getDate() + 2); // Segunda
+          matchDate.setHours(20, 0, 0);
+      }
+      
+      matchesData.push({
+        homeTeamId: r % 2 === 0 ? home : away, // Alterna os mandos
+        awayTeamId: r % 2 === 0 ? away : home,
+        matchDate: matchDate,
+        round: r
+      });
+    }
+    
+    // Rotacionar os times (método circular), mantendo o primeiro (índice 0) fixo
+    const lastTeam = roundTeams.pop();
+    roundTeams.splice(1, 0, lastTeam);
+    
+    // Avançar uma semana
+    currentDate.setDate(currentDate.getDate() + 7);
+  }
+
+  console.log(`Inserindo um total de ${matchesData.length} partidas no banco de dados...`);
   for (const m of matchesData) {
     await prisma.match.create({ data: m });
   }
   
-  console.log("Calendário oficial da 19ª Rodada configurado!");
+  console.log("Calendário oficial de todas as rodadas configurado!");
 }
 
 main()

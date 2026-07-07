@@ -20,6 +20,12 @@ export default async function RootLayout({
     orderBy: { totalPoints: 'desc' }
   });
 
+  // Calcular o acumulado: total de participações pagas × R$20
+  const totalPaid = await prisma.roundParticipation.count({
+    where: { isPaid: true }
+  });
+  const acumulado = totalPaid * 20;
+
   return (
     <html lang="pt-BR">
       <body className="min-h-screen flex flex-col antialiased">
@@ -33,9 +39,17 @@ export default async function RootLayout({
           )}
           <header className="bg-slate-900 border-b border-slate-800">
           <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-            <Link href="/" className="text-xl font-bold text-primary flex items-center gap-2">
-              <img src="https://logodownload.org/wp-content/uploads/2017/04/campeonato-brasileiro-logo-1.png" alt="Bolão Brasileirão" className="h-10 w-auto drop-shadow-md bg-white rounded-md p-1" />
-            </Link>
+            <div className="flex items-center gap-4">
+              <Link href="/" className="text-xl font-bold text-primary flex items-center gap-2">
+                <img src="https://logodownload.org/wp-content/uploads/2017/04/campeonato-brasileiro-logo-1.png" alt="Bolão Brasileirão" className="h-10 w-auto drop-shadow-md bg-white rounded-md p-1" />
+              </Link>
+              <div className="hidden sm:flex flex-col items-center bg-gradient-to-r from-yellow-500/20 via-yellow-400/10 to-yellow-500/20 border border-yellow-500/40 rounded-lg px-4 py-1 shadow-[0_0_20px_rgba(234,179,8,0.2)]">
+                <span className="text-[10px] uppercase tracking-widest text-yellow-500/80 font-bold leading-none">Acumulado</span>
+                <span className="text-lg font-black text-yellow-400 leading-tight drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]">
+                  R$ {acumulado.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                </span>
+              </div>
+            </div>
             <nav className="flex gap-6 items-center">
               <Link href="/premios" className="text-yellow-400 font-bold hover:text-yellow-300 transition-colors drop-shadow-[0_0_5px_rgba(250,204,21,0.5)]">Prêmios 💰</Link>
               <Link href="/jogos" className="text-slate-300 hover:text-white transition-colors">Jogos</Link>
