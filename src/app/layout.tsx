@@ -28,22 +28,36 @@ export default async function RootLayout({
     orderBy: { totalPoints: 'desc' }
   });
 
-  // Calcular o acumulado: total de participações pagas × R$20
   const totalPaid = await prisma.roundParticipation.count({
     where: { isPaid: true }
   });
-  const acumulado = totalPaid * 20;
+  
+  // Dividindo os valores conforme a regra (exemplo: 1/3 para a Sena da rodada e 2/3 para o prêmio final)
+  const poolTotal = totalPaid * 20;
+  const premioSena = Math.floor(poolTotal * 0.33);
+  const premioFinal = poolTotal - premioSena;
 
   return (
     <html lang="pt-BR">
       <body className="min-h-screen flex flex-col antialiased">
         <Providers>
-          {/* Barra do Acumulado - sempre visível */}
-          <div className="w-full bg-gradient-to-r from-yellow-600/30 via-yellow-500/20 to-yellow-600/30 border-b border-yellow-500/30 py-1.5 px-4 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(234,179,8,0.15)]">
-            <span className="text-[10px] sm:text-xs uppercase tracking-widest text-yellow-500/80 font-bold">💰 Acumulado</span>
-            <span className="text-base sm:text-xl font-black text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]">
-              R$ {acumulado.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-            </span>
+          {/* Barra dos Acumulados - sempre visível */}
+          <div className="w-full flex flex-col sm:flex-row border-b border-slate-700/50">
+            {/* Prêmio Final */}
+            <div className="flex-1 bg-gradient-to-r from-emerald-900/60 to-emerald-800/40 border-r border-slate-700/30 py-1.5 px-4 flex items-center justify-center gap-2 sm:gap-3">
+              <span className="text-[10px] sm:text-xs uppercase tracking-widest text-emerald-400 font-bold">🏆 Prêmio Final</span>
+              <span className="text-sm sm:text-lg font-black text-emerald-300 drop-shadow-[0_0_8px_rgba(52,211,153,0.6)]">
+                R$ {premioFinal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+              </span>
+            </div>
+            
+            {/* Sena da Rodada */}
+            <div className="flex-1 bg-gradient-to-r from-yellow-700/40 to-yellow-600/30 py-1.5 px-4 flex items-center justify-center gap-2 sm:gap-3 shadow-[inset_0_0_15px_rgba(234,179,8,0.1)]">
+              <span className="text-[10px] sm:text-xs uppercase tracking-widest text-yellow-500 font-bold">🎯 Sena (6 acertos)</span>
+              <span className="text-sm sm:text-lg font-black text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]">
+                R$ {premioSena.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+              </span>
+            </div>
           </div>
 
           {/* Marquee do líder */}

@@ -104,7 +104,27 @@ export async function GET() {
       await prisma.match.create({ data: m });
     }
     
-    return NextResponse.json({ success: true, message: "Banco populado com sucesso (200 partidas)!" });
+    console.log("Inserindo usuários da hierarquia (Dono, Gerente, Colaborador)...");
+    
+    const dono = await prisma.user.upsert({
+      where: { email: 'dono@bolao.com' },
+      update: { role: 'DONO' },
+      create: { name: 'Dono (Felipe)', email: 'dono@bolao.com', pixKey: '11999999999', role: 'DONO' }
+    });
+
+    const gerente = await prisma.user.upsert({
+      where: { email: 'gerente@bolao.com' },
+      update: { role: 'GERENTE', invitedById: dono.id },
+      create: { name: 'Gerente (João)', email: 'gerente@bolao.com', pixKey: 'gerente@pix.com', role: 'GERENTE', invitedById: dono.id }
+    });
+
+    await prisma.user.upsert({
+      where: { email: 'colaborador@bolao.com' },
+      update: { role: 'COLABORADOR', invitedById: gerente.id },
+      create: { name: 'Colaborador (Pedro)', email: 'colaborador@bolao.com', pixKey: 'colaborador@pix.com', role: 'COLABORADOR', invitedById: gerente.id }
+    });
+
+    return NextResponse.json({ success: true, message: "Banco populado com sucesso (200 partidas e 3 usuários mock)!" });
   } catch (error: any) {
     console.error(error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
