@@ -68,12 +68,12 @@ export default async function JogosPage({
   });
 
   return (
-    <div className="max-w-5xl mx-auto py-10">
-      <div className="flex justify-between items-center mb-8 border-b border-slate-700 pb-4">
-        <h1 className="text-3xl font-bold text-primary">Jogos do Brasileirão</h1>
+    <div className="max-w-5xl mx-auto py-4 sm:py-10">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 border-b border-slate-700 pb-3 sm:pb-4 gap-3">
+        <h1 className="text-xl sm:text-3xl font-bold text-primary">Jogos do Brasileirão</h1>
         
         <div className="flex items-center gap-2">
-          <label className="text-slate-400">Rodada:</label>
+          <label className="text-slate-400 text-sm">Rodada:</label>
           <RoundSelector currentRound={rodada} />
         </div>
       </div>
@@ -101,7 +101,7 @@ export default async function JogosPage({
           Nenhum jogo cadastrado para esta rodada.
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6">
           {matches.map((match) => (
             <MatchCard 
               key={match.id} 

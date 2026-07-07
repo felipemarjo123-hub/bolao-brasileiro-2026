@@ -43,3 +43,12 @@ body {
   white-space: nowrap;
   animation: marquee 20s linear infinite;
 }
+
+/* Esconder scrollbar no nav mobile */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

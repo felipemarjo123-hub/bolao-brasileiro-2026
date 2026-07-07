@@ -65,30 +65,34 @@ export default function MatchCard({ match, userBet }: MatchCardProps) {
   };
 
   return (
-    <div className="bg-card border border-slate-700 rounded-xl p-4 flex flex-col items-center">
-      <div className="text-sm text-slate-400 mb-4 text-center">
-        Rodada {match.round} • {format(new Date(match.matchDate), "dd/MM 'às' HH:mm", { locale: ptBR })}
+    <div className="bg-card border border-slate-700 rounded-xl p-3 sm:p-4 flex flex-col items-center">
+      {/* Data e Status */}
+      <div className="text-[11px] sm:text-sm text-slate-400 mb-3 text-center">
+        <span className="text-slate-500">R{match.round}</span>
+        <span className="mx-1.5">•</span>
+        {format(new Date(match.matchDate), "dd/MM 'às' HH:mm", { locale: ptBR })}
         {match.status === 'LIVE' && <span className="ml-2 text-red-500 font-bold animate-pulse">AO VIVO</span>}
         {match.status === 'FINISHED' && <span className="ml-2 text-primary font-bold">FIM</span>}
       </div>
 
-      <div className="flex items-center justify-between w-full gap-4">
+      {/* Times e Placar */}
+      <div className="flex items-center justify-between w-full gap-2 sm:gap-4">
         {/* Home Team */}
-        <div className="flex flex-col items-center flex-1">
-          <div className="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center mb-2">
+        <div className="flex flex-col items-center flex-1 min-w-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-slate-800 rounded-full flex items-center justify-center mb-1.5">
             {match.homeTeam.logoUrl ? (
-              <img src={match.homeTeam.logoUrl} alt={match.homeTeam.shortName} className="w-8 h-8" />
+              <img src={match.homeTeam.logoUrl} alt={match.homeTeam.shortName} className="w-6 h-6 sm:w-8 sm:h-8 object-contain" />
             ) : (
-              <span className="font-bold text-slate-400">{match.homeTeam.shortName}</span>
+              <span className="font-bold text-slate-400 text-xs">{match.homeTeam.shortName}</span>
             )}
           </div>
-          <span className="font-semibold text-center">{match.homeTeam.name}</span>
+          <span className="font-semibold text-center text-[11px] sm:text-sm leading-tight truncate w-full">{match.homeTeam.name}</span>
         </div>
 
         {/* Scores */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {match.status !== 'PENDING' ? (
-            <div className="text-3xl font-black bg-slate-900 px-4 py-2 rounded-md">
+            <div className="text-xl sm:text-3xl font-black bg-slate-900 px-3 sm:px-4 py-1.5 sm:py-2 rounded-md">
               {match.homeScore} <span className="text-slate-600">x</span> {match.awayScore}
             </div>
           ) : (
@@ -100,9 +104,9 @@ export default function MatchCard({ match, userBet }: MatchCardProps) {
                 value={homeScore}
                 onChange={(e) => setHomeScore(e.target.value)}
                 disabled={isMatchStarted}
-                className="w-12 h-12 text-center text-xl font-bold bg-slate-900 border border-slate-700 rounded-md focus:border-primary focus:outline-none disabled:opacity-50"
+                className="w-10 h-10 sm:w-12 sm:h-12 text-center text-lg sm:text-xl font-bold bg-slate-900 border border-slate-700 rounded-md focus:border-primary focus:outline-none disabled:opacity-50"
               />
-              <span className="text-slate-600 font-bold">X</span>
+              <span className="text-slate-600 font-bold text-sm">X</span>
               <input 
                 type="number" 
                 min="0" 
@@ -110,31 +114,32 @@ export default function MatchCard({ match, userBet }: MatchCardProps) {
                 value={awayScore}
                 onChange={(e) => setAwayScore(e.target.value)}
                 disabled={isMatchStarted}
-                className="w-12 h-12 text-center text-xl font-bold bg-slate-900 border border-slate-700 rounded-md focus:border-primary focus:outline-none disabled:opacity-50"
+                className="w-10 h-10 sm:w-12 sm:h-12 text-center text-lg sm:text-xl font-bold bg-slate-900 border border-slate-700 rounded-md focus:border-primary focus:outline-none disabled:opacity-50"
               />
             </>
           )}
         </div>
 
         {/* Away Team */}
-        <div className="flex flex-col items-center flex-1">
-          <div className="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center mb-2">
+        <div className="flex flex-col items-center flex-1 min-w-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-slate-800 rounded-full flex items-center justify-center mb-1.5">
             {match.awayTeam.logoUrl ? (
-              <img src={match.awayTeam.logoUrl} alt={match.awayTeam.shortName} className="w-8 h-8" />
+              <img src={match.awayTeam.logoUrl} alt={match.awayTeam.shortName} className="w-6 h-6 sm:w-8 sm:h-8 object-contain" />
             ) : (
-              <span className="font-bold text-slate-400">{match.awayTeam.shortName}</span>
+              <span className="font-bold text-slate-400 text-xs">{match.awayTeam.shortName}</span>
             )}
           </div>
-          <span className="font-semibold text-center">{match.awayTeam.name}</span>
+          <span className="font-semibold text-center text-[11px] sm:text-sm leading-tight truncate w-full">{match.awayTeam.name}</span>
         </div>
       </div>
 
+      {/* Botão Salvar */}
       {match.status === 'PENDING' && !isMatchStarted && (
-        <div className="mt-6 flex flex-col items-center w-full">
+        <div className="mt-4 flex flex-col items-center w-full">
           <button 
             onClick={handleSaveBet}
             disabled={loading || homeScore === "" || awayScore === ""}
-            className="w-full bg-slate-800 hover:bg-primary text-white font-medium py-2 rounded-md transition-colors disabled:opacity-50"
+            className="w-full bg-slate-800 hover:bg-primary hover:text-black text-white font-medium py-2 rounded-md transition-colors disabled:opacity-50 text-sm"
           >
             {loading ? "Salvando..." : "Salvar Palpite"}
           </button>
@@ -142,8 +147,9 @@ export default function MatchCard({ match, userBet }: MatchCardProps) {
         </div>
       )}
 
+      {/* Palpite já feito */}
       {isMatchStarted && userBet && (
-        <div className="mt-4 w-full text-center text-sm bg-slate-900 py-2 rounded border border-slate-800">
+        <div className="mt-3 w-full text-center text-xs sm:text-sm bg-slate-900 py-1.5 sm:py-2 rounded border border-slate-800">
           Seu palpite: <span className="font-bold">{userBet.homeBetScore} x {userBet.awayBetScore}</span>
         </div>
       )}
