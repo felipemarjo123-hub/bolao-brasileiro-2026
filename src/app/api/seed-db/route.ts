@@ -36,7 +36,7 @@ export async function GET() {
     { name: "Vitória", shortName: "VIT", logoUrl: "/escudos/vitoria.svg" }
     ];
 
-    const createdTeams = [];
+    const createdTeams: any[] = [];
     for (const t of teamsData) {
       const team = await prisma.team.create({ data: t });
       createdTeams.push(team);
