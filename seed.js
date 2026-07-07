@@ -5,32 +5,113 @@ async function main() {
   console.log("Deletando dados antigos...");
   await prisma.bet.deleteMany();
   await prisma.match.deleteMany();
+  await prisma.standingsChampionship.deleteMany();
   await prisma.team.deleteMany();
 
   console.log("Inserindo Clubes com Escudos Oficiais...");
 
   const teamsData = [
-    { name: 'Athletico-PR', shortName: 'CAP', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/b/b3/CA_Paranaense.svg' },
-    { name: 'Atlético-MG', shortName: 'CAM', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/27/Clube_Atl%C3%A9tico_Mineiro_logo.svg' },
-    { name: 'Bahia', shortName: 'BAH', logoUrl: 'https://upload.wikimedia.org/wikipedia/pt/2/2c/Esporte_Clube_Bahia_logo.svg' },
-    { name: 'Botafogo', shortName: 'BOT', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Botafogo_de_Futebol_e_Regatas_logo.svg' },
-    { name: 'Chapecoense', shortName: 'CHA', logoUrl: 'https://upload.wikimedia.org/wikipedia/pt/e/eb/Associa%C3%A7%C3%A3o_Chapecoense_de_Futebol_Logo.svg' },
-    { name: 'Corinthians', shortName: 'COR', logoUrl: 'https://upload.wikimedia.org/wikipedia/pt/b/b4/Corinthians_s%C3%ADmbolo.png' },
-    { name: 'Coritiba', shortName: 'CFC', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/4b/Coritiba_FBC_2.svg' },
-    { name: 'Cruzeiro', shortName: 'CRU', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/90/Cruzeiro_Esporte_Clube_%28logo%29.svg' },
-    { name: 'Flamengo', shortName: 'FLA', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/2e/Flamengo_braz_logo.svg' },
-    { name: 'Fluminense', shortName: 'FLU', logoUrl: 'https://upload.wikimedia.org/wikipedia/pt/a/a3/Fluminense_FC_escudo.png' },
-    { name: 'Grêmio', shortName: 'GRE', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/30/Gr%C3%AAmio_FBPA_logo.svg' },
-    { name: 'Internacional', shortName: 'INT', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/f1/Escudo_do_Sport_Club_Internacional.svg' },
-    { name: 'Mirassol', shortName: 'MIR', logoUrl: 'https://upload.wikimedia.org/wikipedia/pt/0/0d/Mirassol_Futebol_Clube_logo.svg' },
-    { name: 'Palmeiras', shortName: 'PAL', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/10/Palmeiras_logo.svg' },
-    { name: 'RB Bragantino', shortName: 'RBB', logoUrl: 'https://upload.wikimedia.org/wikipedia/pt/a/aa/Red_Bull_Bragantino.svg' },
-    { name: 'Remo', shortName: 'REM', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/98/Clube_do_Remo.svg' },
-    { name: 'Santos', shortName: 'SAN', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/35/Santos_logo.svg' },
-    { name: 'São Paulo', shortName: 'SAO', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/4b/S%C3%A3o_Paulo_Futebol_Clube.png' },
-    { name: 'Vasco', shortName: 'VAS', logoUrl: 'https://upload.wikimedia.org/wikipedia/pt/a/ac/CRVascodaGama.png' },
-    { name: 'Vitória', shortName: 'VIT', logoUrl: 'https://upload.wikimedia.org/wikipedia/pt/7/7b/Esporte_Clube_Vit%C3%B3ria_logo.svg' },
-  ];
+  {
+    "name": "Athletico-PR",
+    "shortName": "CAP",
+    "logoUrl": "/escudos/athletico-pr.svg"
+  },
+  {
+    "name": "Atlético-MG",
+    "shortName": "CAM",
+    "logoUrl": "/escudos/atletico-mg.svg"
+  },
+  {
+    "name": "Bahia",
+    "shortName": "BAH",
+    "logoUrl": "/escudos/bahia.svg"
+  },
+  {
+    "name": "Botafogo",
+    "shortName": "BOT",
+    "logoUrl": "/escudos/botafogo.svg"
+  },
+  {
+    "name": "Chapecoense",
+    "shortName": "CHA",
+    "logoUrl": "/escudos/chapecoense.png"
+  },
+  {
+    "name": "Corinthians",
+    "shortName": "COR",
+    "logoUrl": "/escudos/corinthians.png"
+  },
+  {
+    "name": "Coritiba",
+    "shortName": "CFC",
+    "logoUrl": "/escudos/coritiba.svg"
+  },
+  {
+    "name": "Cruzeiro",
+    "shortName": "CRU",
+    "logoUrl": "/escudos/cruzeiro.svg"
+  },
+  {
+    "name": "Flamengo",
+    "shortName": "FLA",
+    "logoUrl": "/escudos/flamengo.svg"
+  },
+  {
+    "name": "Fluminense",
+    "shortName": "FLU",
+    "logoUrl": "/escudos/fluminense.png"
+  },
+  {
+    "name": "Grêmio",
+    "shortName": "GRE",
+    "logoUrl": "/escudos/gremio.svg"
+  },
+  {
+    "name": "Internacional",
+    "shortName": "INT",
+    "logoUrl": "/escudos/internacional.svg"
+  },
+  {
+    "name": "Mirassol",
+    "shortName": "MIR",
+    "logoUrl": "/escudos/mirassol.svg"
+  },
+  {
+    "name": "Palmeiras",
+    "shortName": "PAL",
+    "logoUrl": "/escudos/palmeiras.svg"
+  },
+  {
+    "name": "RB Bragantino",
+    "shortName": "RBB",
+    "logoUrl": "/escudos/rb-bragantino.png"
+  },
+  {
+    "name": "Remo",
+    "shortName": "REM",
+    "logoUrl": "/escudos/remo.svg"
+  },
+  {
+    "name": "Santos",
+    "shortName": "SAN",
+    "logoUrl": "/escudos/santos.svg"
+  },
+  {
+    "name": "São Paulo",
+    "shortName": "SAO",
+    "logoUrl": "/escudos/sao-paulo.png"
+  },
+  {
+    "name": "Vasco",
+    "shortName": "VAS",
+    "logoUrl": "/escudos/vasco.svg"
+  },
+  {
+    "name": "Vitória",
+    "shortName": "VIT",
+    "logoUrl": "/escudos/vitoria.svg"
+  }
+];
 
   const createdTeams = [];
   for (const t of teamsData) {
