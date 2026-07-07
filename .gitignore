@@ -5,3 +5,6 @@ node_modules
 *.db-journal
 .env
 .env*.local
+dev.db
+prisma/dev.db
+
