@@ -9,7 +9,12 @@ export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   title: "Bolão Brasileirão 2026",
   description: "A melhor plataforma de palpites para o Campeonato Brasileiro",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default async function RootLayout({
