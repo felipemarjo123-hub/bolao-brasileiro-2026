@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Providers } from "@/components/Providers";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: "Bolão Brasileirão 2026",
   description: "A melhor plataforma de palpites para o Campeonato Brasileiro",
